@@ -3,10 +3,10 @@ all: clean linux windows
 clean:
 	rm -rf release
 
-linux: clean
+linux:
 	dotnet publish ./alma-location-checker --configuration Release --framework net5.0 --output ./release/linux --self-contained false --runtime linux-x64
 
-windows: clean
+windows:
 	dotnet publish ./alma-location-checker --configuration Release --framework net5.0 --output ./release/win10 --self-contained false --runtime win10-x64
 
 sign: windows
