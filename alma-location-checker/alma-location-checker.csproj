@@ -6,4 +6,8 @@
         <RootNamespace>alma_location_checker</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="refit" Version="5.2.4" />
+    </ItemGroup>
+
 </Project>
