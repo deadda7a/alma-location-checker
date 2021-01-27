@@ -9,3 +9,7 @@ sudo apt install apt-transport-https
 sudo apt update
 sudo apt install dotnet-sdk-5.0
 ```
+2. Install packages
+```bash
+dotnet restore
+```
