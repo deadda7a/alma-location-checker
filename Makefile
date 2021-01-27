@@ -5,6 +5,9 @@ all: clean linux windows
 clean:
 	rm -rf release
 
+debug:
+	dotnet build --configuration Debug --framework net5.0 --output ./debug
+
 linux:
 	dotnet publish ./alma-location-checker --configuration Release --framework net5.0 --output ./release/linux --self-contained ${SELF_CONTAINED} --runtime linux-x64
 
