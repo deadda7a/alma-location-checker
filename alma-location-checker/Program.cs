@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 namespace alma_location_checker {
     class Program {
         static int Main(string[] args) {
-            string configFile = "config-example.ini";
+            string configFile = "config.ini";
             string logFile = "alma-location-checker.log";
             
             // Initialize logging
@@ -24,9 +24,9 @@ namespace alma_location_checker {
             
             var config = new ConfigurationBuilder().AddIniFile(configFile).Build();
             Log.Information("Successfully read config file.");
-            
-            string test = config["apiUrl"];
-            Console.WriteLine(test);
+            string apiUrl = config["apiUrl"];
+            string apiKey = config["apiKey"];
+            Log.Information("{apiUrl}", apiUrl);
             
             Log.CloseAndFlush();
             return 0;
