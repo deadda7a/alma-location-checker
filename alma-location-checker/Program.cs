@@ -1,23 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Text.RegularExpressions;
 using Figgle;
 using Serilog;
 using Microsoft.Extensions.Configuration;
 
 namespace alma_location_checker {
     class Program {
-        private static bool CheckBarcode(string barcode) {
-            Regex newBarcodePattern = new Regex(@"\+XAW\d+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            Regex oldBarcodePattern = new Regex(@"\d{8}", RegexOptions.Compiled); // We don't need to be case insensitive here
-            
-            if (oldBarcodePattern.IsMatch(barcode) || newBarcodePattern.IsMatch(barcode)) {
-                return true;
-            }
-
-            return false;
-        }
-
         private static void UserLog(string message, string level) {
             ConsoleColor oldForeground = Console.ForegroundColor;
             
@@ -40,8 +28,6 @@ namespace alma_location_checker {
             Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.File(logFile).CreateLogger();
             Log.Information("Starting Application...");
             
-            Console.WriteLine(FiggleFonts.Big.Render("AK Bibliothek"));
-            
             // Check if config file exists
             if (!File.Exists(configFile)) {
                 Console.WriteLine("Konnte die Configdatei nicht laden!");
@@ -58,10 +44,12 @@ namespace alma_location_checker {
             string apiKey = config["apiKey"];
             Log.Information("{apiUrl}", apiUrl);
             
+            Console.WriteLine(FiggleFonts.Big.Render(config["libraryName"]));
             Console.WriteLine("Drücke q und ENTER um das Programm zu beenden!");
 
             string userInput = "";
             do {
+                var medium = new Medium();
                 userInput = Console.ReadLine();
                 Log.Information("Scanned Barcode {barcode}", userInput);
 
@@ -69,7 +57,7 @@ namespace alma_location_checker {
                     UserLog("Bitte gib einen Barcode ein!", "error");
                 }
 
-                if (userInput != "q" && CheckBarcode(userInput)) {
+                if (userInput != "q" && medium.CheckBarcode(userInput)) {
                     Console.WriteLine("ok");
                 } else {
                     Log.Error("Invalid Barcode!");
