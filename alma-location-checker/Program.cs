@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
+using Figgle;
 using Serilog;
 using Microsoft.Extensions.Configuration;
 
@@ -26,7 +27,9 @@ namespace alma_location_checker {
             Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.File(logFile).CreateLogger();
             Log.Information("Starting Application...");
             
-            // Try to read config
+            Console.WriteLine(FiggleFonts.Big.Render("AK Bibliothek"));
+            
+            // Check if config file exists
             if (!File.Exists(configFile)) {
                 Console.WriteLine("Konnte die Configdatei nicht laden!");
                 Console.WriteLine("Drücke eine Taste um das Programm zu beenden...");
@@ -35,6 +38,7 @@ namespace alma_location_checker {
                 return 1;
             }
             
+            // Read config
             var config = new ConfigurationBuilder().AddIniFile(configFile).Build();
             Log.Information("Successfully read config file.");
             string apiUrl = config["apiUrl"];
