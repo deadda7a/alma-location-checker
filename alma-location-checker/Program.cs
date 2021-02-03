@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Figgle;
 using Serilog;
 using Microsoft.Extensions.Configuration;
+using Serilog.Debugging;
 
 namespace alma_location_checker {
     class Program {
@@ -17,6 +19,20 @@ namespace alma_location_checker {
             }
 
             return false;
+        }
+
+        private static void UserLog(string message, string level) {
+            ConsoleColor oldForeground = Console.ForegroundColor;
+            
+            Console.ForegroundColor = level switch
+            {
+                "warning" => ConsoleColor.Yellow,
+                "error" => ConsoleColor.Red,
+                _ => Console.ForegroundColor
+            };
+
+            Console.WriteLine(message);
+            Console.ForegroundColor = oldForeground;
         }
         
         static int Main(string[] args) {
@@ -44,6 +60,26 @@ namespace alma_location_checker {
             string apiUrl = config["apiUrl"];
             string apiKey = config["apiKey"];
             Log.Information("{apiUrl}", apiUrl);
+            
+            Console.WriteLine("Drücke q und ENTER um das Programm zu beenden!");
+
+            string userInput = "";
+            do {
+                userInput = Console.ReadLine();
+                Log.Information("Scanned Barcode {barcode}", userInput);
+
+                if (userInput == null) {
+                    UserLog("Bitte gib einen Barcode ein!", "error");
+                }
+
+                if (userInput != "q" && CheckBarcode(userInput)) {
+                    Console.WriteLine("ok");
+                } else {
+                    Log.Error("Invalid Barcode!");
+                    UserLog("Ungültiger Barcode!", "error");
+                }
+                
+            } while (userInput != "q");
             
             Log.CloseAndFlush();
             return 0;
