@@ -1,10 +1,22 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using System.Text.RegularExpressions;
 using Serilog;
 using Microsoft.Extensions.Configuration;
 
 namespace alma_location_checker {
     class Program {
+        private static bool CheckBarcode(string barcode) {
+            Regex newBarcodePattern = new Regex(@"\+XAW\d+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            
+            if (int.TryParse(barcode, out int tmp) || newBarcodePattern.IsMatch(barcode)) {
+                return true;
+            }
+
+            return false;
+        }
+        
         static int Main(string[] args) {
             string configFile = "config.ini";
             string logFile = "alma-location-checker.log";
