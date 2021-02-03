@@ -1,16 +1,28 @@
-using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Refit;
 
 namespace alma_location_checker {
+    [Headers("Accept: application/json", "User-Agent: akw-location-checker v0.1", "Authorization: apikey")]
+    public interface AlmaApi {
+        [Get("/almaws/v1/items?item_barcode={barcode}")]
+        Task<Medium> GetData(string barcode);
+    }
+    
     public class Medium {
-        internal bool CheckBarcode(string barcode) {
-            Regex newBarcodePattern = new Regex(@"\+XAW\d+\w?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            Regex oldBarcodePattern = new Regex(@"\d{8}", RegexOptions.Compiled); // We don't need to be case insensitive here
-            
-            if (oldBarcodePattern.IsMatch(barcode) || newBarcodePattern.IsMatch(barcode)) {
-                return true;
-            }
-
-            return false;
-        }
+        [JsonProperty(PropertyName = "title")]
+        public string title {get; set;}
+        
+        [JsonProperty(PropertyName = "location")]
+        public string location {get; set;}
+        
+        [JsonProperty(PropertyName = "base_status")]
+        public string baseStatus {get; set;}
+        
+        [JsonProperty(PropertyName = "work_order_type")]
+        public string workOrderType {get; set;}
+        
+        [JsonProperty(PropertyName = "call_number")]
+        public string callNumber {get; set;}
     }
 }

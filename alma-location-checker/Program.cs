@@ -1,8 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Net.Mime;
 using Figgle;
 using Serilog;
 using Microsoft.Extensions.Configuration;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Refit;
 
 namespace alma_location_checker {
     class Program {
@@ -19,8 +23,15 @@ namespace alma_location_checker {
             Console.WriteLine(message);
             Console.ForegroundColor = oldForeground;
         }
+
+        private static bool CheckBarcode(string barcode) {
+            Regex newBarcodePattern = new Regex(@"\+XAW\d+\w?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            Regex oldBarcodePattern = new Regex(@"\d{8}", RegexOptions.Compiled); // We don't need to be case insensitive here
+            
+            return oldBarcodePattern.IsMatch(barcode) || newBarcodePattern.IsMatch(barcode);
+        }
         
-        static int Main(string[] args) {
+        static async Task Main(string[] args) {
             string configFile = "config.ini";
             string logFile = "alma-location-checker.log";
             
@@ -34,7 +45,7 @@ namespace alma_location_checker {
                 Console.WriteLine("Drücke eine Taste um das Programm zu beenden...");
                 Log.Error(("Could not load the config file!"));
                 Console.ReadKey();
-                return 1;
+                Environment.Exit(1);
             }
             
             // Read config
@@ -42,22 +53,24 @@ namespace alma_location_checker {
             Log.Information("Successfully read config file.");
             string apiUrl = config["apiUrl"];
             string apiKey = config["apiKey"];
-            Log.Information("{apiUrl}", apiUrl);
+            Log.Information("API Endpoint: {apiUrl}", apiUrl);
             
             Console.WriteLine(FiggleFonts.Big.Render(config["libraryName"]));
             Console.WriteLine("Drücke q und ENTER um das Programm zu beenden!");
+
+            var api = RestService.For<AlmaApi>(apiUrl);
 
             string userInput = "";
             do {
                 var medium = new Medium();
                 userInput = Console.ReadLine();
-                Log.Information("Scanned Barcode {barcode}", userInput);
+                Log.Information("User input: {barcode}", userInput);
 
                 if (userInput == null) {
                     UserLog("Bitte gib einen Barcode ein!", "error");
                 }
 
-                if (userInput != "q" && medium.CheckBarcode(userInput)) {
+                if (userInput != "q" && CheckBarcode(userInput)) {
                     Console.WriteLine("ok");
                 } else {
                     Log.Error("Invalid Barcode!");
@@ -66,8 +79,8 @@ namespace alma_location_checker {
                 
             } while (userInput != "q");
             
+            Log.Information(("Goodbye."));
             Log.CloseAndFlush();
-            return 0;
         }
     }
 }
