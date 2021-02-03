@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Figgle;
 using Serilog;
 using Microsoft.Extensions.Configuration;
-using Serilog.Debugging;
 
 namespace alma_location_checker {
     class Program {
