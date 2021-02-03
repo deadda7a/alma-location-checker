@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="ConsoleTables" Version="2.4.2" />
       <PackageReference Include="Figgle" Version="0.4.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="5.0.0" />
       <PackageReference Include="refit" Version="5.2.4" />
