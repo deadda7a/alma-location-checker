@@ -9,8 +9,9 @@ namespace alma_location_checker {
     class Program {
         private static bool CheckBarcode(string barcode) {
             Regex newBarcodePattern = new Regex(@"\+XAW\d+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            Regex oldBarcodePattern = new Regex(@"\d{8}", RegexOptions.Compiled); // We don't need to be case insensitive here
             
-            if (int.TryParse(barcode, out int tmp) || newBarcodePattern.IsMatch(barcode)) {
+            if (oldBarcodePattern.IsMatch(barcode) || newBarcodePattern.IsMatch(barcode)) {
                 return true;
             }
 
