@@ -23,7 +23,7 @@ def initLog():
     logzero.loglevel(loglevelFromCli)
 
     # Do we want to log as json?
-    if (jsonLogFromCli == "Y" or jsonLogFromCli == "YES"):
+    if jsonLogFromCli == "Y" or jsonLogFromCli == "YES":
         logzero.json()
 
     # Log to file
@@ -41,7 +41,7 @@ def readConfig():
     except FileNotFoundError:
         log.critical("Can't read {0}!".format(configFile))
         print("Konnte die Configdatei nicht laden!")
-        return 1
+        exit(1)
 
 def makeRequest(barcode):
     encodedBarcode = parse.quote_plus(barcode) # Our barcodes start with + and therefore have to be urlencoded
@@ -53,16 +53,15 @@ def makeRequest(barcode):
         "Authorization": "apikey {0}".format(config["apiKey"])
     }
 
-
     apiRequest = requests.get(targetUrl, headers=headers)
     dataFromApi = apiRequest.json()
-    
+
     if apiRequest.status_code != requests.codes.ok:
         log.error("We got error code {0} and content {1}".format(apiRequest.status_code, apiRequest.text))
         print(term.bright_red("Ein Fehler ist bei der Abfrage der Daten aufgetreten!"))
         print("Die ALMA Schnittstelle meldet den Code {0} und die Fehlerbeschreibung {1}".format(dataFromApi["errorList"]["error"][0]["errorCode"], dataFromApi["errorList"]["error"][0]["errorMessage"]))
         raise RuntimeWarning("Invalid API Data")
-    
+
     return dataFromApi
 
 def cli():
