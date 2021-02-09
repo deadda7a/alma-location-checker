@@ -46,7 +46,17 @@ def makeRequest(barcode, config):
         "barcode": barcode
     }
 
+    headers = {
+        "User-Agent": "alma-location-checker 0.1",
+        "Accept": "application/json",
+        "Authorization": "apikey {0}".format(config["apiKey"])
+    }
+
     targetUrl = "{0}/almaws/v1/items".format(config["apiUrl"])
+
+    apiRequest = requests.get(targetUrl, data=payload, headers=headers)
+    dataFromApi = apiRequest.json()
+    log.debug("Got response {0}".format(dataFromApi))
 
 def cli():
     args = getArgs()
