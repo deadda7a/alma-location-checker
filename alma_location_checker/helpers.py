@@ -3,7 +3,7 @@ import re
 def checkBarcode(barcode):
     newBarcodeRegex = "\+XAW\d+\w?"
     oldBarcodeRegex = "\d{8}"
-    if (re.compile(newBarcodeRegex).search(barcode)) or (re.compile(oldBarcodeRegex).search(barcode)):
+    if re.match(newBarcodeRegex, barcode) or re.match(oldBarcodeRegex, barcode):
         return True
 
     return False

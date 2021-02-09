@@ -9,7 +9,9 @@ setup(
         'argparse',
         'logzero',
         'pyyaml',
-        'requests'
+        'requests',
+        'colorama',
+        'blessings'
     ],
     entry_points='''
         [console_scripts]

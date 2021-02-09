@@ -3,6 +3,9 @@ import yaml
 import argparse
 import sys
 import requests
+from colorama import init, Fore, Back, Style
+from blessings import Terminal
+from urllib import parse
 from logzero import logger as log
 from .helpers import checkBarcode
 
@@ -13,7 +16,7 @@ def getArgs():
     parser.add_argument("--jsonlog", help="Log output as JSON. Default no")
     return vars(parser.parse_args())
 
-def initLog(args):
+def initLog():
     # Logging
     loglevelFromCli = getattr(sys.modules["logging"], args["loglevel"].upper() if args["loglevel"] else "INFO")
     jsonLogFromCli = args["jsonlog"].upper() if args["jsonlog"] else "N"
@@ -23,11 +26,10 @@ def initLog(args):
     if (jsonLogFromCli == "Y" or jsonLogFromCli == "YES"):
         logzero.json()
 
-    logzero.logfile("alma-location-checker.log", mode="w", disableStderrLogger=True)
-    log.debug("Command Line Parameters: {0}".format(args))
+    # Log to file
+    logzero.logfile("alma-location-checker.log", mode="a", disableStderrLogger=True) # "a" means append to logfile
 
 def readConfig():
-    # Read config
     configFile = "config.yml"
 
     try:
@@ -41,10 +43,9 @@ def readConfig():
         print("Konnte die Configdatei nicht laden!")
         return 1
 
-def makeRequest(barcode, config):
-    payload = {
-        "barcode": barcode
-    }
+def makeRequest(barcode):
+    encodedBarcode = parse.quote_plus(barcode) # Our barcodes start with + and therefore have to be urlencoded
+    targetUrl = "{0}/almaws/v1/items?item_barcode={1}".format(config["apiUrl"], encodedBarcode)
 
     headers = {
         "User-Agent": "alma-location-checker 0.1",
@@ -52,15 +53,28 @@ def makeRequest(barcode, config):
         "Authorization": "apikey {0}".format(config["apiKey"])
     }
 
-    targetUrl = "{0}/almaws/v1/items".format(config["apiUrl"])
 
-    apiRequest = requests.get(targetUrl, data=payload, headers=headers)
+    apiRequest = requests.get(targetUrl, headers=headers)
     dataFromApi = apiRequest.json()
-    log.debug("Got response {0}".format(dataFromApi))
+    
+    if apiRequest.status_code != requests.codes.ok:
+        log.error("We got error code {0} and content {1}".format(apiRequest.status_code, apiRequest.text))
+        print(term.bright_red("Ein Fehler ist bei der Abfrage der Daten aufgetreten!"))
+        print("Die ALMA Schnittstelle meldet den Code {0} und die Fehlerbeschreibung {1}".format(dataFromApi["errorList"]["error"][0]["errorCode"], dataFromApi["errorList"]["error"][0]["errorMessage"]))
+        raise RuntimeWarning("Invalid API Data")
+    
+    return dataFromApi
 
 def cli():
+    global term
+    global args
+    global config
+
+    init() # This inits colorama
+    term = Terminal()
     args = getArgs()
-    initLog(args)
+    initLog()
+    log.debug("Command Line Parameters: {0}".format(args))
     log.info("Program start.")
     config = readConfig()
 
@@ -76,7 +90,7 @@ def cli():
 
         if checkBarcode(barcode):
             log.debug("User input {0} was valid!".format(barcode))
-            bookData = makeRequest(barcode, config)
+            bookData = makeRequest(barcode)
         else:
             print("Ungültiger Barcode!")
             log.error("User input {0} was invalid!".format(barcode))
