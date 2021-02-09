@@ -1,2 +1,0 @@
-def barcodecheck():
-    return True
