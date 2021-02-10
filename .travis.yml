@@ -9,9 +9,11 @@ before_install:
   - pip install pyinstaller
 
 script:
+  - cd $TRAVIS_BUILD_DIR
   - pip install .
   - pyinstaller alma_location_checker/checker.py
   - 7z.exe a checker.zip build/*
+  - mv checker.zip build
 
 deploy:
   provider: pages
