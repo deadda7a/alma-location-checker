@@ -5,14 +5,14 @@ python: "3.9"
 before_install:
   - choco install python
   - choco install 7zip
-  - export PATH="/c/Python39:/c/Python39/Scripts:$PATH"
+  - $env:Path += ";C:\Program Files\7-Zip;C:\Python39;C:\Python39\Sripts;"
   - virtualenv $HOME/venv
   - source $HOME/venv/Scripts/activate
   - pip install pyinstaller
 
 script:
   - pyinstaller alma_location_checker/checker.py
-  - 'C:\Program Files\7-Zip\7z.exe' a checker.zip build/*
+  - '\7z.exe' a checker.zip build/*
 
 deploy:
   provider: pages
