@@ -1,15 +1,18 @@
 # Alma location checker
 ## Requirements
-1. .net Core
+1. Python3 and virtualenv
 ```bash
-wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
 sudo apt update
-sudo apt install apt-transport-https
-sudo apt update
-sudo apt install dotnet-sdk-5.0
+sudo apt install python3-virtualenv
 ```
-2. Install packages
+2. venv
 ```bash
-dotnet restore
+virtualenv venv
+. venv/bin/activate
+```
+
+3. run
+```bash
+pip install --editable .
+alma-location-checker --loglevel INFO
 ```
