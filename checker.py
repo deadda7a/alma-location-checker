@@ -119,6 +119,17 @@ table = BeautifulTable(
 table.columns.header = ["Titel", "Autor", "Signatur", "Standort", "Prozesstyp"]
 table.columns.alignment = BeautifulTable.ALIGN_LEFT
 
+print("           ,ggg, ,ggg,        gg   ,ggggggggggg,")
+print("          dP\"\"8IdP\"\"Y8b       dP  dP\"\"\"88\"\"\"\"\"\"Y8,       ,dPYb,     ,dPYb,                   I8   ,dPYb,              ,dPYb,")
+print("         dP   88Yb, `88      d8'  Yb,  88      `8b       IP'`Yb     IP'`Yb                   I8   IP'`Yb              IP'`Yb")
+print("        dP    88 `\"  88    ,dP'    `\"  88      ,8P  gg   I8  8I     I8  8I  gg            88888888I8  8I              I8  8I")
+print("       ,8'    88     88aaad8\"          88aaaad8P\"   \"\"   I8  8'     I8  8'  \"\"               I8   I8  8'              I8  8bgg,")
+print("       d88888888     88\"\"\"\"Yb,         88\"\"\"\"Y8ba   gg   I8 dP      I8 dP   gg     ,ggggg,   I8   I8 dPgg,    ,ggg,   I8 dP\" \"8")
+print(" __   ,8\"     88     88     \"8b        88      `8b  88   I8dP   88ggI8dP    88    dP\"  \"Y8gggI8   I8dP\" \"8I  i8\" \"8i  I8d8bggP\"")
+print("dP\"  ,8P      Y8     88      `8i       88      ,8P  88   I8P    8I  I8P     88   i8'    ,8I ,I8,  I8P    I8  I8, ,8I  I8P' \"Yb,")
+print("Yb,_,dP       `8b,   88       Yb,      88_____,d8'_,88,_,d8b,  ,8I ,d8b,_ _,88,_,d8,   ,d8',d88b,,d8     I8, `YbadP' ,d8    `Yb,")
+print(" \"Y8P\"         `Y8   88        Y8     88888888P\"  8P\"\"Y88P'\"Y88P\"' 8P'\"Y888P\"\"Y8P\"Y8888P\"  8P\"\"Y888P     `Y8888P\"Y88888P      Y8")
+
 print("Drücke CTRL + D um zu beenden...")
 
 while True:
