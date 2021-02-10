@@ -1,6 +1,7 @@
 import logzero
 import argparse
 import sys
+from pyfiglet import Figlet
 from requests import get, codes
 from yaml import load, FullLoader
 from colorama import init, Fore, Back, Style
@@ -87,7 +88,8 @@ def cli():
     table.columns.header = ["Titel", "Autor", "Signatur", "Standort", "Prozesstyp"]
     table.columns.alignment = BeautifulTable.ALIGN_LEFT
 
-    print("Willkommen! Bibliothek: {0}".format(config["libraryName"]))
+    figlet = Figlet(font="big")
+    print(figlet.renderText(format(config["libraryName"])))
     print("Drücke CTRL + D um zu beenden...")
 
     while True:

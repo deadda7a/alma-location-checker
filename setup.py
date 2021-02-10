@@ -12,7 +12,8 @@ setup(
         'requests',
         'colorama',
         'blessings',
-        'beautifultable'
+        'beautifultable',
+        'pyfiglet'
     ],
     entry_points='''
         [console_scripts]
