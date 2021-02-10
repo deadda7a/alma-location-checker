@@ -1,0 +1,6 @@
+argparse
+logzero
+requests
+colorama
+blessed
+beautifultable

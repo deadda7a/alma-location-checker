@@ -13,6 +13,6 @@ virtualenv venv
 
 3. run
 ```bash
-pip install --editable .
+pip install -r requirements.txt
 alma-location-checker --loglevel INFO
 ```
