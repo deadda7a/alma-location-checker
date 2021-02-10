@@ -4,6 +4,24 @@ python: "3.9"
 
 before_install:
   - choco install python
+  - choco install 7zip
   - export PATH="/c/Python39:/c/Python39/Scripts:$PATH"
   - virtualenv $HOME/venv
   - source $HOME/venv/Scripts/activate
+  - pip install pyinstaller
+
+script:
+  - pyinstaller alma_location_checker/checker.py
+  - 'C:\Program Files\7-Zip\7z.exe' a checker.zip build/*
+
+deploy:
+  provider: pages
+  token: $GITHUB_TOKEN
+  keep_history: true
+  local_dir: $TRAVIS_BUILD_DIR/build
+  strategy: git
+  edge: true
+  target_branch: gh-pages
+  committer_from_gh: true
+  on:
+    branch: main
