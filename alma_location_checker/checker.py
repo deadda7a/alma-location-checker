@@ -7,6 +7,7 @@ from colorama import init, Fore, Back, Style
 from blessings import Terminal
 from urllib import parse
 from logzero import logger as log
+from beautifultable import BeautifulTable
 from .helpers import checkBarcode, mediumData
 
 def getArgs():
@@ -77,6 +78,8 @@ def cli():
     log.debug("Command Line Parameters: {0}".format(args))
     log.info("Program start.")
     config = readConfig()
+    table = BeautifulTable()
+    table.columns.header = ["Titel", "Autor", "Signatur", "Standort", "Prozesstyp"]
 
     print("Willkommen! Bibliothek: {0}".format(config["libraryName"]))
     print("Drücke CTRL + D um zu beenden...")
