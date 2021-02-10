@@ -11,7 +11,8 @@ setup(
         'pyyaml',
         'requests',
         'colorama',
-        'blessings'
+        'blessings',
+        'beautifultable'
     ],
     entry_points='''
         [console_scripts]

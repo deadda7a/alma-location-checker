@@ -7,7 +7,7 @@ from colorama import init, Fore, Back, Style
 from blessings import Terminal
 from urllib import parse
 from logzero import logger as log
-from .helpers import checkBarcode
+from .helpers import checkBarcode, mediumData
 
 def getArgs():
     # CLI Params
@@ -41,6 +41,7 @@ def readConfig():
     except FileNotFoundError:
         log.critical("Can't read {0}!".format(configFile))
         print("Konnte die Configdatei nicht laden!")
+        log.info("Program end.")
         exit(1)
 
 def makeRequest(barcode):
@@ -89,7 +90,13 @@ def cli():
 
         if checkBarcode(barcode):
             log.debug("User input {0} was valid!".format(barcode))
-            bookData = makeRequest(barcode)
+            try:
+                mediumDataFromApi = makeRequest(barcode) # Make the request to the API
+            except RuntimeWarning:
+                continue
+
+            medium = mediumData(mediumDataFromApi, term)
+
         else:
-            print("Ungültiger Barcode!")
+            print(term.bright_red("Ungültiger Barcode!"))
             log.error("User input {0} was invalid!".format(barcode))
