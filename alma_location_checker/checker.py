@@ -64,6 +64,8 @@ def makeRequest(barcode):
         print("Die ALMA Schnittstelle meldet den Code {0} und die Fehlerbeschreibung {1}".format(dataFromApi["errorList"]["error"][0]["errorCode"], dataFromApi["errorList"]["error"][0]["errorMessage"]))
         raise RuntimeWarning("Invalid API Data")
 
+    log.debug("API response {0}".format(apiRequest.text))
+
     return dataFromApi
 
 def cli():
@@ -104,6 +106,7 @@ def cli():
                 continue
 
             medium = mediumData(mediumDataFromApi, term)
+            log.debug("mediumData {0}".format(medium))
 
             table.rows.append(medium.values())
             print(table)
