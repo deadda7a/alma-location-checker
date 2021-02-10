@@ -4,11 +4,11 @@ import sys
 import re
 from requests import get, codes
 from yaml import load, FullLoader
-from colorama import init, Fore, Back, Style
-from blessed import Terminal
+from colorama import init
 from urllib import parse
 from logzero import logger as log
 from beautifultable import BeautifulTable
+from blessed import Terminal
 
 def getArgs():
     # CLI Params
@@ -124,6 +124,7 @@ print("Drücke CTRL + D um zu beenden...")
 while True:
     try:
         barcode = input(term.bold("Bitte gib einen Barcode ein: "))
+        barcode = term.strip(barcode)
         print(term.clear())
     except (EOFError, KeyboardInterrupt):
         log.info("Program end.")
