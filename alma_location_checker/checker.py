@@ -1,8 +1,8 @@
 import logzero
-import yaml
 import argparse
 import sys
-import requests
+from requests import get, codes
+from yaml import load, FullLoader
 from colorama import init, Fore, Back, Style
 from blessings import Terminal
 from urllib import parse
@@ -35,7 +35,7 @@ def readConfig():
 
     try:
         with open(configFile, "r") as configString:
-            parsedConfig = yaml.load(configString, Loader=yaml.FullLoader)
+            parsedConfig = load(configString, Loader=FullLoader)
             log.debug("Read config file {0}, got {1}".format(configFile, parsedConfig))
             return parsedConfig
 
@@ -55,10 +55,10 @@ def makeRequest(barcode):
         "Authorization": "apikey {0}".format(config["apiKey"])
     }
 
-    apiRequest = requests.get(targetUrl, headers=headers)
+    apiRequest = get(targetUrl, headers=headers)
     dataFromApi = apiRequest.json()
 
-    if apiRequest.status_code != requests.codes.ok:
+    if apiRequest.status_code != codes.ok:
         log.error("We got error code {0} and content {1}".format(apiRequest.status_code, apiRequest.text))
         print(term.bright_red("Ein Fehler ist bei der Abfrage der Daten aufgetreten!"))
         print("Die ALMA Schnittstelle meldet den Code {0} und die Fehlerbeschreibung {1}".format(dataFromApi["errorList"]["error"][0]["errorCode"], dataFromApi["errorList"]["error"][0]["errorMessage"]))
@@ -92,7 +92,7 @@ def cli():
 
     while True:
         try:
-            barcode = input("Bitte gib einen Barcode ein: ")
+            barcode = input(term.bold("Bitte gib einen Barcode ein: "))
             print(term.clear())
         except EOFError:
             log.info("Program end.")
