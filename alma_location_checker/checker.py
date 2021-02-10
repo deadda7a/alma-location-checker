@@ -78,8 +78,12 @@ def cli():
     log.debug("Command Line Parameters: {0}".format(args))
     log.info("Program start.")
     config = readConfig()
-    table = BeautifulTable()
+    table = BeautifulTable(
+        maxwidth=term.width
+    )
+
     table.columns.header = ["Titel", "Autor", "Signatur", "Standort", "Prozesstyp"]
+    table.columns.alignment = BeautifulTable.ALIGN_LEFT
 
     print("Willkommen! Bibliothek: {0}".format(config["libraryName"]))
     print("Drücke CTRL + D um zu beenden...")
@@ -87,6 +91,7 @@ def cli():
     while True:
         try:
             barcode = input("Bitte gib einen Barcode ein: ")
+            print(term.clear())
         except EOFError:
             log.info("Program end.")
             return 0
@@ -100,6 +105,8 @@ def cli():
 
             medium = mediumData(mediumDataFromApi, term)
 
+            table.rows.append(medium.values())
+            print(table)
         else:
             print(term.bright_red("Ungültiger Barcode!"))
             log.error("User input {0} was invalid!".format(barcode))
