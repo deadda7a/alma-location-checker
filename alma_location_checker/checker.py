@@ -96,7 +96,7 @@ def cli():
         try:
             barcode = input(term.bold("Bitte gib einen Barcode ein: "))
             print(term.clear())
-        except EOFError:
+        except (EOFError, KeyboardInterrupt):
             log.info("Program end.")
             return 0
 
