@@ -23,8 +23,8 @@ def mediumData(mediumDataFromApi, term):
     else:
         medium["location"] = mediumDataFromApi["item_data"]["location"]["value"]  # All other locations don't have a color
 
-    if not mediumDataFromApi["item_data"]["base_status"]["value"]: # Is the item available? 
-        if mediumDataFromApi["item_data"]["process_type"]["desc"] == "Loan":
+    if mediumDataFromApi["item_data"]["base_status"]["value"] == "0": # Is the item available? 
+        if mediumDataFromApi["item_data"]["process_type"]["desc"] == "Loan": # If not, and its of type "loan"
             medium["workOrderType"] = term.bright_red("Loan")
         else:
             # something like "Acquisition technical services"
