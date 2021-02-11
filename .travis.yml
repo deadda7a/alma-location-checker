@@ -12,7 +12,7 @@ before_install:
 
 script:
   - cd $TRAVIS_BUILD_DIR
-  - cxfreeze -c alma_location_checker\checker.py --target-dir dist
+  - cxfreeze -c checker.py --target-dir dist
   - 7z.exe a checker.zip build/*
   - mv checker.zip build
 
