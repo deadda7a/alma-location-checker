@@ -5,7 +5,7 @@ python: "3.9"
 before_install:
   - choco install python
   - choco install 7zip
-  - PATH=$PATH:"C:/Program\ Files/7-Zip:C:/Python39:C:/Python39/Scripts"
+  - PATH=$PATH:"/c/Program\ Files/7-Zip:/c/Python39:/c/Python39/Scripts"
   - python -m pip install --upgrade pip
   - pip install -r requirements.txt
   - pip install -r requirements-windows.txt
